@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import TagSearch from './TagSearch';
+import { useBlog } from '../../../context/BlogContext';
 
 const BlogSection = () => {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    fetch('https://dummyjson.com/products?limit=6')
-      .then((res) => res.json())
-      .then((data) => setPosts(data.products));
-  }, []);
+  const { posts } = useBlog();
 
   return (
     <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 md:grid-cols-4 gap-6">
       <div className="md:col-span-3 space-y-6">
         <div className="bg-gray-100 text-center p-6 rounded">
           <h2 className="font-semibold text-lg">Share Your Knowledge With Our Readers</h2>
-          <button className="mt-3 px-4 py-2 border border-teal-500 text-teal-500 rounded hover:bg-teal-50">
+          <Link 
+            to="/create"
+            className="mt-3 px-4 py-2 border border-teal-500 text-teal-500 rounded hover:bg-teal-50 inline-block"
+          >
             ✍️ Write On Notebook
-          </button>
+          </Link>
         </div>
 
         <div>
@@ -26,20 +25,22 @@ const BlogSection = () => {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {posts.map((post) => (
-              <div key={post.id}>
-                <div className="h-40 bg-gray-300 rounded"></div>
-                <div className="mt-2">
-                  <span className="text-xs bg-gray-100 px-2 py-1 rounded">Travel</span>
-                  <h3 className="text-lg font-semibold mt-2">{post.title}</h3>
-                  <div className="text-sm text-gray-500 mt-1">
-                    <span>👤 Jessica Kali</span> &nbsp;|&nbsp;
-                    <span>📅 02 December 2022</span> &nbsp;|&nbsp;
-                    <span>⏱ 5 Min. To Read</span>
+            {posts.slice(0, 6).map((post) => (
+              <Link key={post.id} to={`/post/${post.id}`}>
+                <div className="hover:shadow-lg transition-shadow duration-200 rounded-lg overflow-hidden">
+                  <div className="h-40 bg-gray-300 rounded-t-lg"></div>
+                  <div className="mt-2 p-2">
+                    <span className="text-xs bg-gray-100 px-2 py-1 rounded">{post.category}</span>
+                    <h3 className="text-lg font-semibold mt-2 hover:text-teal-600">{post.title}</h3>
+                    <div className="text-sm text-gray-500 mt-1">
+                      <span>👤 {post.author}</span> &nbsp;|&nbsp;
+                      <span>📅 {new Date(post.date).toLocaleDateString()}</span> &nbsp;|&nbsp;
+                      <span>⏱ {post.readTime} Min. To Read</span>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1">{post.excerpt}</p>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{post.description}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
