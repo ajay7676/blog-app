@@ -33,7 +33,10 @@ const Navbar = () => {
             <FaSearch />
         </li>
         <li>
-            <FaEdit />
+            <Link to="/create" className="flex items-center gap-1 hover:text-teal-600">
+              <FaEdit />
+              <span className="text-sm">Write</span>
+            </Link>
         </li>
         <li>Contact</li>
         <li >En <span><FaChevronDown /></span></li>
